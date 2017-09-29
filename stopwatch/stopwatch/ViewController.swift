@@ -18,7 +18,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet var myTableView: UITableView!
     
     var counter = 0.00
-    var timer = NSTimer()
+    var timer = Timer()
     var isPlaying = false
     var lapArray = NSMutableArray()
 
@@ -26,14 +26,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        startButton.hidden = false
-        startButton.enabled = true
-        resetButton.hidden = false
-        resetButton.enabled = true
-        stopButton.hidden = true
-        stopButton.enabled = false
-        lapButton.hidden = true
-        lapButton.enabled = false
+        startButton.isHidden = false
+        startButton.isEnabled = true
+        resetButton.isHidden = false
+        resetButton.isEnabled = true
+        stopButton.isHidden = true
+        stopButton.isEnabled = false
+        lapButton.isHidden = true
+        lapButton.isEnabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,16 +41,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func resetAction(sender: AnyObject) {
+    @IBAction func resetAction(_ sender: AnyObject) {
         
-        startButton.hidden = false
-        startButton.enabled = true
-        resetButton.hidden = false
-        resetButton.enabled = true
-        stopButton.hidden = true
-        stopButton.enabled = false
-        lapButton.hidden = true
-        lapButton.enabled = false
+        startButton.isHidden = false
+        startButton.isEnabled = true
+        resetButton.isHidden = false
+        resetButton.isEnabled = true
+        stopButton.isHidden = true
+        stopButton.isEnabled = false
+        lapButton.isHidden = true
+        lapButton.isEnabled = false
         
         timer.invalidate()
         counter = 0
@@ -61,47 +61,47 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         myTableView.reloadData()
     }
 
-    @IBAction func startAction(sender: AnyObject) {
+    @IBAction func startAction(_ sender: AnyObject) {
         if isPlaying {
             return
         }
         
-        startButton.hidden = true
-        startButton.enabled = false
-        resetButton.hidden = true
-        resetButton.enabled = false
-        stopButton.hidden = false
-        stopButton.enabled = true
-        lapButton.hidden = false
-        lapButton.enabled = true
+        startButton.isHidden = true
+        startButton.isEnabled = false
+        resetButton.isHidden = true
+        resetButton.isEnabled = false
+        stopButton.isHidden = false
+        stopButton.isEnabled = true
+        lapButton.isHidden = false
+        lapButton.isEnabled = true
         
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.01, target: self, selector: #selector(self.updateCounter), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(self.updateCounter), userInfo: nil, repeats: true)
         
         isPlaying = true
     }
     
-    @IBAction func lapAction(sender: AnyObject) {
-        lapArray.addObject(timeLabel.text!)
+    @IBAction func lapAction(_ sender: AnyObject) {
+        lapArray.add(timeLabel.text!)
         myTableView.reloadData()
         
         if (myTableView.contentSize.height > myTableView.frame.size.height) {
-            myTableView .setContentOffset(CGPointMake(0, myTableView.contentSize.height - myTableView.frame.size.height), animated: false)
+            myTableView .setContentOffset(CGPoint(x: 0, y: myTableView.contentSize.height - myTableView.frame.size.height), animated: false)
         }
     }
     
-    @IBAction func stopAction(sender: AnyObject) {
+    @IBAction func stopAction(_ sender: AnyObject) {
         if !isPlaying {
             return
         }
         
-        startButton.hidden = false
-        startButton.enabled = true
-        resetButton.hidden = false
-        resetButton.enabled = true
-        stopButton.hidden = true
-        stopButton.enabled = false
-        lapButton.hidden = true
-        lapButton.enabled = false
+        startButton.isHidden = false
+        startButton.isEnabled = true
+        resetButton.isHidden = false
+        resetButton.isEnabled = true
+        stopButton.isHidden = true
+        stopButton.isEnabled = false
+        lapButton.isHidden = true
+        lapButton.isEnabled = false
         
         timer.invalidate()
         isPlaying = false
@@ -117,13 +117,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let minutes = UInt8(timer / 60.0)
         
-        timer -= (NSTimeInterval(minutes) * 60)
+        timer -= (TimeInterval(minutes) * 60)
         
         //calculate the seconds in elapsed time.
         
         let seconds = UInt8(timer)
         
-        timer -= NSTimeInterval(seconds)
+        timer -= TimeInterval(seconds)
         
         //find out the fraction of milliseconds to be displayed.
         
@@ -141,18 +141,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return lapArray.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = myTableView.dequeueReusableCellWithIdentifier("lapCell", forIndexPath: indexPath)
-        cell.textLabel?.text = lapArray.objectAtIndex(indexPath.row) as? String
+        let cell = myTableView.dequeueReusableCell(withIdentifier: "lapCell", for: indexPath)
+        cell.textLabel?.text = lapArray.object(at: indexPath.row) as? String
     
         return cell
     }
