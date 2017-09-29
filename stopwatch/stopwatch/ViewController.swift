@@ -107,7 +107,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         isPlaying = false
     }
     
-    func updateCounter() {
+    @objc func updateCounter() {
         counter = counter + 0.01
         self.updateTimer()
     }
